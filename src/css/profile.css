@@ -1,155 +1,112 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
 body {
-    height: 100vh;
-    background: linear-gradient(#f68b4d, #2f4a5a);
+    color: #2f4658;
 }
 
-/* HEADER */
-.header {
-    background: #a9b8b5;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 30px;
-}
-
-.logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-}
-
-.nav {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-btn {
-    padding: 12px 25px;
-    border-radius: 30px;
-    border: none;
-    background: #dcdcdc;
-    cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    color: inherit;
-    text-decoration: none;
-    display: inline-block;
-}
-
-/* RIGHT PANEL */
 .right-panel {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .search {
-    padding: 10px 20px;
-    border-radius: 30px;
     border: none;
+    border-radius: 22px;
+    padding: 10px 14px;
+    background: #e9edeb;
 }
 
 .mini-avatar {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
-/* MAIN */
 .main {
+    max-width: 1160px;
+    margin: 24px auto;
+    padding: 0 14px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 75%;
 }
 
-/* CARD */
 .profile-card {
-    background: #eaeaea;
-    width: 500px;
-    padding: 40px;
-    border-radius: 25px;
+    background: #e7e7e7;
+    width: min(560px, 100%);
+    border-radius: 24px;
+    padding: 26px;
     text-align: center;
 }
 
-/* AVATAR */
 .avatar {
     display: block;
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    margin: 0 auto 15px;
+    margin: 0 auto 14px;
+    border: 3px solid #2e98a8;
 }
 
 .change-btn {
-    background: #2f8c95;
-    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
+    border-radius: 18px;
+    background: #2e98a8;
+    color: #fff;
+    padding: 10px 14px;
     cursor: pointer;
-    margin-bottom: 25px;
+    margin-bottom: 16px;
 }
 
-/* INPUTS */
-input {
+#profileForm {
+    display: grid;
+    gap: 8px;
+}
+
+#profileForm input {
     width: 100%;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 25px;
     border: none;
-    background: #b8c9c5;
+    border-radius: 14px;
+    padding: 12px;
+    background: #bfd0cb;
+    font-size: 15px;
 }
 
-/* ERRORS */
 .error {
-    color: red;
+    color: #d65c5c;
     font-size: 12px;
     text-align: left;
-    display: block;
+    min-height: 14px;
 }
 
-/* BUTTONS */
-.save-btn {
-    margin-top: 20px;
-    background: #2f8c95;
-    color: white;
+.save-btn,
+.logout-btn {
     border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
+    border-radius: 14px;
+    color: #fff;
+    padding: 11px 14px;
     cursor: pointer;
+    font-size: 15px;
+}
+
+.save-btn {
+    background: #2e98a8;
+    margin-top: 6px;
 }
 
 .logout-btn {
-    margin-top: 15px;
-    background: #f68b4d;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    cursor: pointer;
+    margin-top: 10px;
+    background: #f58d4d;
 }
 
-/* FOOTER */
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: #2f4a5a;
-    color: white;
+.footer-center {
     display: flex;
-    justify-content: space-between;
-    padding: 15px 30px;
-    font-size: 12px;
+    align-items: center;
+    gap: 10px;
 }
 
 .footer-center img {
-    width: 50px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
 }

@@ -115,6 +115,17 @@ app.get("/api/pets", async (req, res) => {
   }
 });
 
+async function resolveBreedId(connection, breedName) {
+  const normalizedBreed = String(breedName || "").trim();
+  const [breedRows] = await connection.query("SELECT breed_id FROM breeds WHERE breed_name = ? LIMIT 1", [normalizedBreed]);
+  if (breedRows.length) {
+    return breedRows[0].breed_id;
+  }
+
+  const [insertBreedResult] = await connection.query("INSERT INTO breeds (breed_name) VALUES (?)", [normalizedBreed]);
+  return insertBreedResult.insertId;
+}
+
 app.post("/api/pets", async (req, res) => {
   const { owner_id, name, birth_date, breed_name, weight, color, notes } = req.body || {};
   const ownerId = Number(owner_id);
@@ -144,18 +155,12 @@ app.post("/api/pets", async (req, res) => {
       return res.status(400).json({ message: "Пользователь owner_id не найден" });
     }
 
-    const [breedRows] = await pool.query("SELECT breed_id FROM breeds WHERE breed_name = ? LIMIT 1", [
-      normalizedBreed
-    ]);
-
+    const connection = await pool.getConnection();
     let breedId;
-    if (breedRows.length) {
-      breedId = breedRows[0].breed_id;
-    } else {
-      const [insertBreedResult] = await pool.query("INSERT INTO breeds (breed_name) VALUES (?)", [
-        normalizedBreed
-      ]);
-      breedId = insertBreedResult.insertId;
+    try {
+      breedId = await resolveBreedId(connection, normalizedBreed);
+    } finally {
+      connection.release();
     }
 
     const [result] = await pool.query(
@@ -190,6 +195,123 @@ app.post("/api/pets", async (req, res) => {
       return res.status(400).json({ message: "Неверная ссылка на владельца или породу" });
     }
     return res.status(500).json({ message: "Ошибка сервера", error: `${error.code || "UNKNOWN"}: ${error.message}` });
+  }
+});
+
+app.put("/api/pets/:petId", async (req, res) => {
+  const petId = Number(req.params.petId);
+  const { owner_id, name, birth_date, breed_name, weight, color, notes } = req.body || {};
+  const ownerId = Number(owner_id);
+  const normalizedName = String(name || "").trim();
+  const normalizedBreed = String(breed_name || "").trim();
+  const normalizedColor = color ? String(color).trim() : null;
+  const normalizedNotes = notes ? String(notes).trim() : null;
+  const normalizedWeightRaw = String(weight ?? "").trim().replace(",", ".");
+  const normalizedWeight =
+    normalizedWeightRaw === "" ? null : Number.isFinite(Number(normalizedWeightRaw)) ? Number(normalizedWeightRaw) : NaN;
+
+  if (!petId || !ownerId || !normalizedName || !normalizedBreed) {
+    return res.status(400).json({ message: "Заполните pet_id, owner_id, name, breed_name" });
+  }
+
+  if (!Number.isFinite(normalizedWeight) && normalizedWeight !== null) {
+    return res.status(400).json({ message: "Вес должен быть числом (например 5.5)" });
+  }
+
+  let connection;
+
+  try {
+    const [petRows] = await pool.query("SELECT pets_id, owner_id FROM pets WHERE pets_id = ? LIMIT 1", [petId]);
+    if (!petRows.length) {
+      return res.status(404).json({ message: "Питомец не найден" });
+    }
+    if (Number(petRows[0].owner_id) !== ownerId) {
+      return res.status(403).json({ message: "Нельзя редактировать чужого питомца" });
+    }
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    const breedId = await resolveBreedId(connection, normalizedBreed);
+
+    await connection.query(
+      `UPDATE pets
+       SET name = ?, birth_date = ?, breed_id = ?, weight = ?, color = ?, notes = ?
+       WHERE pets_id = ?`,
+      [normalizedName, birth_date || null, breedId, normalizedWeight, normalizedColor, normalizedNotes, petId]
+    );
+
+    await connection.commit();
+
+    return res.json({
+      message: "Питомец обновлен",
+      pet: {
+        pets_id: petId,
+        name: normalizedName,
+        birth_date: birth_date || null,
+        owner_id: ownerId,
+        breed_name: normalizedBreed,
+        weight: normalizedWeight,
+        color: normalizedColor,
+        notes: normalizedNotes
+      }
+    });
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    return res.status(500).json({ message: "Ошибка сервера", error: `${error.code || "UNKNOWN"}: ${error.message}` });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+});
+
+app.delete("/api/pets/:petId", async (req, res) => {
+  const petId = Number(req.params.petId);
+  const ownerId = Number(req.query.owner_id);
+
+  if (!petId || !ownerId) {
+    return res.status(400).json({ message: "Нужны pet_id и owner_id" });
+  }
+
+  let connection;
+
+  try {
+    const [petRows] = await pool.query("SELECT pets_id, owner_id FROM pets WHERE pets_id = ? LIMIT 1", [petId]);
+    if (!petRows.length) {
+      return res.status(404).json({ message: "Питомец не найден" });
+    }
+    if (Number(petRows[0].owner_id) !== ownerId) {
+      return res.status(403).json({ message: "Нельзя удалить чужого питомца" });
+    }
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    const [vacsRows] = await connection.query("SELECT id FROM vacs WHERE pet_id = ?", [petId]);
+    const vacIds = vacsRows.map((row) => row.id);
+
+    await connection.query("DELETE FROM pet_health WHERE pet_id = ?", [petId]);
+    if (vacIds.length) {
+      await connection.query("DELETE FROM pet_health WHERE vacs_id IN (?)", [vacIds]);
+    }
+    await connection.query("DELETE FROM vacs WHERE pet_id = ?", [petId]);
+    await connection.query("DELETE FROM pets WHERE pets_id = ?", [petId]);
+
+    await connection.commit();
+
+    return res.json({ message: "Питомец удален" });
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    return res.status(500).json({ message: "Ошибка сервера", error: `${error.code || "UNKNOWN"}: ${error.message}` });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
   }
 });
 

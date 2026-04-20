@@ -7,7 +7,9 @@
 
 body {
     background: linear-gradient(#f68b4d, #2f4a5a);
-    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* HEADER */
@@ -64,10 +66,11 @@ body {
 
 /* MAIN */
 .main {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70%;
+    padding: 20px 0;
 }
 
 .login-card {
@@ -101,11 +104,11 @@ input {
 
 /* FOOTER */
 .footer {
-    position: absolute;
-    bottom: 10px;
+    margin-top: auto;
     width: 100%;
     text-align: center;
     color: white;
+    padding: 10px 0 14px;
 }
 
 /* 🔽 НИЖНИЙ ЛОГО */
@@ -115,4 +118,40 @@ input {
     border-radius: 50%; /* круг */
     object-fit: cover;
     margin-bottom: 10px;
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+.nav-btn,
+.login-btn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, background-color 0.2s ease;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.nav-btn:hover,
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.04);
+}
+
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+.nav-btn:active,
+.login-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.18);
+}
+
+button:focus-visible,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus-visible,
+.nav-btn:focus-visible,
+.login-btn:focus-visible {
+    outline: 3px solid rgba(46, 152, 168, 0.45);
+    outline-offset: 2px;
 }

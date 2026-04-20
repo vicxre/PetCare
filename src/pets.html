@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetCare - Мои питомцы</title>
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/pets.css">
 </head>
 <body data-page="pets">
@@ -18,13 +19,70 @@
         <button class="profile-btn" data-page="profile">Профиль</button>
     </header>
 
-    <main class="page">
-        <section class="card">
-            <h1>Список питомцев</h1>
-            <p>Здесь отображаются все ваши питомцы из базы данных.</p>
+    <main class="page page-wrap">
+        <section class="card pets-card">
+            <div class="pets-head">
+                <div>
+                    <h1>Список питомцев</h1>
+                    <p>Редактируйте или удаляйте питомцев. Все изменения сохраняются в базе данных.</p>
+                </div>
+                <div class="pets-tools">
+                    <input id="petsSearchInput" type="text" class="pets-search" placeholder="Поиск по ключевым словам">
+                    <select id="petsSortSelect" class="pets-sort">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
+                        <option value="name-asc">Имя А-Я</option>
+                        <option value="name-desc">Имя Я-А</option>
+                        <option value="weight-asc">Вес по возрастанию</option>
+                        <option value="weight-desc">Вес по убыванию</option>
+                    </select>
+                </div>
+            </div>
             <div id="petsContainer" class="pets-grid"></div>
         </section>
     </main>
+
+    <footer class="footer">
+        <div>© 2026 PetCare. All rights reserved.</div>
+        <div class="footer-mid">
+            <img src="icons/logo.png" alt="PetCare">
+            <p>PetCare - Система учета домашних животных.</p>
+        </div>
+        <div>
+            <p>Наши контакты:</p>
+            <p>petcare@gmail.com</p>
+            <p>animalcare@gmail.com</p>
+        </div>
+    </footer>
+
+    <div id="editPetModal" class="modal hidden">
+        <div class="modal-card">
+            <button id="closeEditModalBtn" class="close-btn" type="button" title="Закрыть">x</button>
+            <h3>Редактирование питомца</h3>
+            <form id="editPetForm">
+                <input id="editPetId" type="hidden">
+                <label>Имя
+                    <input id="editPetName" type="text" required>
+                </label>
+                <label>Дата рождения
+                    <input id="editPetBirthDate" type="date">
+                </label>
+                <label>Порода
+                    <input id="editPetBreed" type="text" required>
+                </label>
+                <label>Вес (кг)
+                    <input id="editPetWeight" type="number" step="0.1" min="0">
+                </label>
+                <label>Окрас
+                    <input id="editPetColor" type="text">
+                </label>
+                <label>Заметки
+                    <input id="editPetNotes" type="text" maxlength="250">
+                </label>
+                <button class="save-btn" type="submit">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
 
     <script src="js/navigation.js"></script>
     <script src="js/pets.js"></script>

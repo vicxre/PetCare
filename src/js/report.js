@@ -10,7 +10,7 @@ function getOwnerId() {
     }
 }
 
-function renderReport({ petsCount, vaccinationsCount }) {
+function renderReport({ petsCount, vaccinationsCount, nearestVaccinationDate }) {
     if (!reportContainer) return;
 
     reportContainer.innerHTML = `
@@ -21,6 +21,10 @@ function renderReport({ petsCount, vaccinationsCount }) {
         <article class="report-item">
             <h3>Вакцинации</h3>
             <p>Ближайших вакцинаций: ${vaccinationsCount}</p>
+        </article>
+        <article class="report-item">
+            <h3>Следующая вакцина</h3>
+            <p>${nearestVaccinationDate || "Не запланирована"}</p>
         </article>
     `;
 }
@@ -46,9 +50,16 @@ async function loadReport() {
         if (!petsResponse.ok) throw new Error(petsData.message || "Ошибка загрузки питомцев");
         if (!vaccResponse.ok) throw new Error(vaccData.message || "Ошибка загрузки вакцинаций");
 
+        const pets = petsData.pets || [];
+        const vaccs = vaccData.vaccinations || [];
+        const nearestVaccinationDate = vaccs.length
+            ? new Date(vaccs[0].v_date).toLocaleDateString("ru-RU")
+            : null;
+
         renderReport({
-            petsCount: (petsData.pets || []).length,
-            vaccinationsCount: (vaccData.vaccinations || []).length
+            petsCount: pets.length,
+            vaccinationsCount: vaccs.length,
+            nearestVaccinationDate
         });
     } catch (error) {
         if (reportContainer) {

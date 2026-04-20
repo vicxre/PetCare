@@ -1,0 +1,174 @@
+:root {
+    --pc-bg-top: #f58d4d;
+    --pc-bg-bottom: #304759;
+    --pc-header: #afc1be;
+    --pc-nav-bg: #e9edeb;
+    --pc-nav-text: #33495b;
+    --pc-nav-active: #2e98a8;
+    --pc-footer: #2f4658;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--pc-bg-top) 0%, var(--pc-bg-bottom) 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.header {
+    min-height: 92px;
+    background: var(--pc-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 24px;
+}
+
+.logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nav {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.nav-btn,
+.profile-btn {
+    border: none;
+    background: var(--pc-nav-bg);
+    color: var(--pc-nav-text);
+    padding: 11px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 130px;
+    font-size: 15px;
+}
+
+.nav-btn.active,
+.profile-btn.active {
+    background: var(--pc-nav-active);
+    color: #fff;
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+.nav-btn,
+.profile-btn,
+.submit-btn,
+.login-btn,
+.change-btn,
+.save-btn,
+.logout-btn,
+.more-btn,
+.plus-btn,
+.add-btn,
+.arrow-btn,
+.pet-action-btn,
+.upload-btn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, background-color 0.2s ease;
+    will-change: transform;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.nav-btn:hover,
+.profile-btn:hover,
+.submit-btn:hover,
+.login-btn:hover,
+.change-btn:hover,
+.save-btn:hover,
+.logout-btn:hover,
+.more-btn:hover,
+.plus-btn:hover,
+.add-btn:hover,
+.arrow-btn:hover,
+.pet-action-btn:hover,
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.04);
+}
+
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+.nav-btn:active,
+.profile-btn:active,
+.submit-btn:active,
+.login-btn:active,
+.change-btn:active,
+.save-btn:active,
+.logout-btn:active,
+.more-btn:active,
+.plus-btn:active,
+.add-btn:active,
+.arrow-btn:active,
+.pet-action-btn:active,
+.upload-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.18);
+}
+
+button:focus-visible,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus-visible,
+.nav-btn:focus-visible,
+.profile-btn:focus-visible,
+.submit-btn:focus-visible,
+.login-btn:focus-visible,
+.change-btn:focus-visible,
+.save-btn:focus-visible,
+.logout-btn:focus-visible,
+.more-btn:focus-visible,
+.plus-btn:focus-visible,
+.add-btn:focus-visible,
+.arrow-btn:focus-visible,
+.pet-action-btn:focus-visible,
+.upload-btn:focus-visible {
+    outline: 3px solid rgba(46, 152, 168, 0.45);
+    outline-offset: 2px;
+}
+
+.footer {
+    min-height: 94px;
+    background: var(--pc-footer);
+    color: #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px;
+}
+
+@media (max-width: 900px) {
+    .header {
+        justify-content: center;
+    }
+
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
