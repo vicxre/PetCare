@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(#f68b4d, #2f4a5a);
+}
+
+/* HEADER */
+.header {
+    background: #a9b8b5;
+    padding: 15px 40px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px;
+}
+
+/* NAV BUTTONS */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-btn {
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    background: #2f4a5a;
+    color: white;
+    cursor: pointer;
+
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+/* MAIN CARD */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+
+.card {
+    background: #eaeaea;
+    padding: 40px;
+    width: 450px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.card h1 {
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.subtitle a {
+    color: #2f7abf;
+    text-decoration: none;
+}
+
+.subtitle a:hover {
+    text-decoration: underline;
+}
+
+/* INPUTS */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background: #b8c9c5;
+}
+
+/* CHECKBOX */
+.checkbox-block {
+    margin-top: 15px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.checkbox-block input {
+    margin-right: 8px;
+}
+
+/* ERRORS */
+.error {
+    color: red;
+    font-size: 12px;
+    display: block;
+    text-align: left;
+}
+
+/* BUTTON */
+.submit-btn {
+    margin-top: 25px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    background: #f68b4d;
+    color: white;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    transform: scale(1.05);
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.footer-logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}

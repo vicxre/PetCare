@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PetCare - Регистрация</title>
+    <link rel="stylesheet" href="css/registr.css">
+</head>
+<body data-page="registr">
+
+<header class="header">
+    <!-- 🔽 ЛОГО СВЕРХУ -->
+    <div class="logo-container">
+        <img src="icons/logo.png" class="logo-img" alt="logo">
+    </div>
+
+    <nav class="nav">
+        <button class="nav-btn" data-page="main">Главная</button>
+        <button class="nav-btn" data-page="pets">Мои питомцы</button>
+        <button class="nav-btn" data-page="vacs">Вакцинации</button>
+        <button class="nav-btn" data-page="report">Отчеты</button>
+    </nav>
+</header>
+
+<main class="main">
+    <div class="card">
+        <h1>Регистрация</h1>
+
+        <p class="subtitle">
+            Уже есть аккаунт?
+            <!-- 🔥 ВОТ ЗДЕСЬ УКАЗЫВАЕШЬ СТРАНИЦУ ВХОДА -->
+            <a href="enter.html">Войти</a>
+        </p>
+
+        <form id="registerForm">
+
+            <input type="text" id="name" placeholder="Имя:">
+            <span class="error" id="nameError"></span>
+
+            <input type="text" id="email" placeholder="E-mail:">
+            <span class="error" id="emailError"></span>
+
+            <input type="password" id="password" placeholder="Пароль:">
+            <span class="error" id="passwordError"></span>
+
+            <div class="checkbox-block">
+                <input type="checkbox" id="agree">
+                <label for="agree">согласие на обработку персональных данных</label>
+            </div>
+            <span class="error" id="agreeError"></span>
+
+            <button type="submit" class="submit-btn">Зарегистрироваться</button>
+        </form>
+    </div>
+</main>
+
+<footer class="footer">
+
+    <!-- 🔽 ЛОГО СНИЗУ -->
+    <div class="footer-logo">
+        <img src="icons/logo.png" alt="logo">
+    </div>
+
+    <div class="footer-text">
+        PetCare — Система учета домашних животных.
+    </div>
+
+</footer>
+
+<script src="js/navigation.js"></script>
+<script src="js/registr.js"></script>
+</body>
+</html>

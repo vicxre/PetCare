@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Вакцинации</title>
+    <link rel="stylesheet" href="css/vacs.css">
+</head>
+<body data-page="vacs">
+    <header class="header">
+        <img src="icons/logo.png" alt="PetCare" class="logo">
+
+        <nav class="nav">
+            <button class="nav-btn" data-page="main">Главная</button>
+            <button class="nav-btn" data-page="pets">Мои питомцы</button>
+            <button class="nav-btn" data-page="vacs">Вакцинации</button>
+            <button class="nav-btn" data-page="report">Отчеты</button>
+        </nav>
+
+        <div class="header-right">
+            <input class="search-input" id="vaccSearch" type="text" placeholder="Поиск">
+            <button id="profileBtn" class="avatar-btn" title="Профиль">
+                <img src="img/nekit rip.jpg" alt="Профиль">
+            </button>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="panel left-panel">
+            <h2 class="block-title">Список вакцинаций</h2>
+            <div id="vaccList" class="vacc-list"></div>
+            <button id="openAddModalBtn" class="add-btn" title="Добавить вакцинацию">+</button>
+        </section>
+
+        <section class="panel right-panel">
+            <div class="calendar-head">
+                <button id="prevMonthBtn" class="arrow-btn" title="Предыдущий месяц">&#8592;</button>
+                <h2 class="block-title month-title">Вакцинации на месяц</h2>
+                <button id="nextMonthBtn" class="arrow-btn" title="Следующий месяц">&#8594;</button>
+            </div>
+            <h3 id="monthName" class="month-name"></h3>
+
+            <div class="weekdays">
+                <span>ПН</span>
+                <span>ВТ</span>
+                <span>СР</span>
+                <span>ЧТ</span>
+                <span>ПТ</span>
+                <span>СБ</span>
+                <span>ВС</span>
+            </div>
+
+            <div id="calendarGrid" class="calendar-grid"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div>© 2026 PetCare. All rights reserved.</div>
+        <div class="footer-mid">
+            <img src="icons/logo.png" alt="PetCare">
+            <p>PetCare - Система учета домашних животных.</p>
+        </div>
+        <div class="footer-right-text">
+            <p>Наши контакты:</p>
+            <p>petcare@gmail.com</p>
+            <p>animalcare@gmail.com</p>
+        </div>
+    </footer>
+
+    <div id="addVaccModal" class="modal hidden">
+        <div class="modal-card">
+            <button id="closeModalBtn" class="close-btn" title="Закрыть">x</button>
+            <h3>Добавление вакцинации</h3>
+            <form id="addVaccForm">
+                <label>Питомец
+                    <select id="petSelect" required></select>
+                </label>
+                <label>Название вакцинации
+                    <input id="vaccineTypeInput" type="text" required>
+                </label>
+                <label>Дата вакцинации
+                    <input id="vaccineDateInput" type="date" required>
+                </label>
+                <label>Стоимость
+                    <input id="vaccinePriceInput" type="number" step="0.01" min="0">
+                </label>
+                <button class="submit-btn" type="submit">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/vacs.js"></script>
+</body>
+</html>

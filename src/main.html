@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Главная</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body data-page="main">
+    <header class="header">
+        <img src="icons/logo.png" alt="PetCare" class="logo">
+
+        <nav class="nav">
+            <button class="nav-btn" data-page="main">Главная</button>
+            <button class="nav-btn" data-page="pets">Мои питомцы</button>
+            <button class="nav-btn" data-page="vacs">Вакцинации</button>
+            <button class="nav-btn" data-page="report">Отчеты</button>
+        </nav>
+
+        <div class="header-right">
+            <input id="searchInput" class="search-input" type="text" placeholder="Поиск по питомцам">
+            <button id="profileBtn" class="avatar-btn" title="Профиль">
+                <img src="img/nekit rip.jpg" alt="Профиль">
+            </button>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="panel panel-pets">
+            <div class="panel-top">
+                <h2 class="panel-title">Питомцы</h2>
+                <button id="addPetBtn" class="plus-btn" title="Добавить питомца">+</button>
+            </div>
+
+            <div id="petsList" class="pets-list"></div>
+
+            <button id="morePetsBtn" class="more-btn">Смотреть больше</button>
+        </section>
+
+        <section class="panel panel-vacc">
+            <div class="panel-top single">
+                <h2 class="panel-title">Ближайшие вакцинации</h2>
+            </div>
+
+            <div class="vacc-table">
+                <div class="vacc-row vacc-head">
+                    <span>Имя</span>
+                    <span>Дата</span>
+                    <span>Название</span>
+                </div>
+                <div id="vaccList"></div>
+            </div>
+
+            <button id="moreVaccBtn" class="more-btn">Смотреть больше</button>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-left">
+            <p>© 2026 PetCare. All rights reserved.</p>
+        </div>
+
+        <div class="footer-center">
+            <img src="icons/logo.png" alt="PetCare">
+            <p>PetCare - Система учета домашних животных.</p>
+        </div>
+
+        <div class="footer-right">
+            <p>Наши контакты:</p>
+            <p>petcare@gmail.com</p>
+            <p>animalcare@gmail.com</p>
+        </div>
+    </footer>
+
+    <div id="petModal" class="modal hidden">
+        <div class="modal-content">
+            <button id="closeModalBtn" class="close-modal" title="Закрыть">x</button>
+            <h3>Добавление нового питомца</h3>
+
+            <form id="petForm">
+                <div class="modal-fields">
+                    <label>Имя
+                        <input id="petName" type="text" required>
+                    </label>
+                    <label>Дата рождения
+                        <input id="petBirthDate" type="date">
+                    </label>
+                    <label>Порода
+                        <input id="petBreed" type="text" required>
+                    </label>
+                    <label>Вес (кг)
+                        <input id="petWeight" type="number" step="0.1" min="0">
+                    </label>
+                    <label>Окрас
+                        <input id="petColor" type="text">
+                    </label>
+                    <label>Заметки
+                        <input id="petNotes" type="text" maxlength="250">
+                    </label>
+                </div>
+
+                <div class="upload-row">
+                    <input id="petPhoto" type="file" accept=".png,.jpg,.jpeg" hidden>
+                    <button id="uploadPhotoBtn" type="button" class="upload-btn">Загрузить фото (png,jpg)</button>
+                    <span id="photoName" class="photo-name">Файл не выбран</span>
+                </div>
+
+                <button type="submit" class="submit-btn">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

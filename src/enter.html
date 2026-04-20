@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PetCare - Вход</title>
+    <link rel="stylesheet" href="css/enter.css">
+</head>
+<body data-page="enter">
+
+<header class="header">
+
+    <div class="logo-container">
+        <img src="icons/logo.png" alt="logo" class="logo-img">
+    </div>
+
+    <nav class="nav">
+        <button class="nav-btn" data-page="main">Главная</button>
+        <button class="nav-btn" data-page="pets">Мои питомцы</button>
+        <button class="nav-btn" data-page="vacs">Вакцинации</button>
+        <button class="nav-btn" data-page="report">Отчеты</button>
+    </nav>
+</header>
+
+<main class="main">
+    <div class="login-card">
+        <h1>Вход</h1>
+
+        <p class="subtitle">
+            Войдите в аккаунт если он уже есть, если нет
+            <a href="registr.html">Зарегистрируйтесь здесь</a>
+        </p>
+
+        <form id="loginForm">
+            <input type="text" id="email" placeholder="E-mail">
+            <span class="error" id="emailError"></span>
+
+            <input type="password" id="password" placeholder="Пароль">
+            <span class="error" id="passwordError"></span>
+
+            <button type="submit" class="login-btn">Войти</button>
+        </form>
+    </div>
+</main>
+
+<footer class="footer">
+
+    <div class="footer-logo">
+        <img src="icons/logo.png" alt="logo">
+    </div>
+
+    <p class="footer-text">
+        PetCare — Система учета домашних животных.
+    </p>
+
+</footer>
+
+<script src="js/navigation.js"></script>
+<script src="js/enter.js"></script>
+</body>
+</html>

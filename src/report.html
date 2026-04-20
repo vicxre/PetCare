@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Отчеты</title>
+    <link rel="stylesheet" href="css/report.css">
+</head>
+<body data-page="report">
+    <header class="header">
+        <img src="icons/logo.png" alt="PetCare" class="logo">
+        <nav class="nav">
+            <button class="nav-btn" data-page="main">Главная</button>
+            <button class="nav-btn" data-page="pets">Мои питомцы</button>
+            <button class="nav-btn" data-page="vacs">Вакцинации</button>
+            <button class="nav-btn" data-page="report">Отчеты</button>
+        </nav>
+        <button class="profile-btn" data-page="profile">Профиль</button>
+    </header>
+
+    <main class="page">
+        <section class="card">
+            <h1>Отчеты</h1>
+            <p>Сводка по питомцам и вакцинациям.</p>
+            <div id="reportContainer" class="report-grid"></div>
+        </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/report.js"></script>
+</body>
+</html>

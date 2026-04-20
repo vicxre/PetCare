@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Мои питомцы</title>
+    <link rel="stylesheet" href="css/pets.css">
+</head>
+<body data-page="pets">
+    <header class="header">
+        <img src="icons/logo.png" alt="PetCare" class="logo">
+        <nav class="nav">
+            <button class="nav-btn" data-page="main">Главная</button>
+            <button class="nav-btn" data-page="pets">Мои питомцы</button>
+            <button class="nav-btn" data-page="vacs">Вакцинации</button>
+            <button class="nav-btn" data-page="report">Отчеты</button>
+        </nav>
+        <button class="profile-btn" data-page="profile">Профиль</button>
+    </header>
+
+    <main class="page">
+        <section class="card">
+            <h1>Список питомцев</h1>
+            <p>Здесь отображаются все ваши питомцы из базы данных.</p>
+            <div id="petsContainer" class="pets-grid"></div>
+        </section>
+    </main>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/pets.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PetCare - Профиль</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body data-page="profile">
+
+<header class="header">
+    <a href="main.html">
+        <img src="icons/logo.png" class="logo" alt="PetCare">
+    </a>
+
+    <nav class="nav">
+        <a class="nav-btn" href="main.html">Главная</a>
+        <button class="nav-btn" data-page="pets">Мои питомцы</button>
+        <button class="nav-btn" data-page="vacs">Вакцинации</button>
+        <button class="nav-btn" data-page="report">Отчеты</button>
+    </nav>
+
+    <div class="right-panel">
+        <input type="text" placeholder="Поиск" class="search">
+        <img src="img/nekit rip.jpg" class="mini-avatar">
+    </div>
+</header>
+
+<main class="main">
+
+    <div class="profile-card">
+
+        <!-- АВАТАР -->
+        <img id="avatarPreview" src="img/nekit rip.jpg" class="avatar">
+
+        <input type="file" id="avatarInput" hidden>
+
+        <button class="change-btn" onclick="document.getElementById('avatarInput').click()">
+            Изменить фото профиля
+        </button>
+
+        <!-- ФОРМА -->
+        <form id="profileForm">
+
+            <input type="text" id="name" placeholder="Имя:">
+            <span class="error" id="nameError"></span>
+
+            <input type="text" id="email" placeholder="E-mail:">
+            <span class="error" id="emailError"></span>
+
+            <input type="password" id="password" placeholder="Новый пароль:">
+            <span class="error" id="passwordError"></span>
+
+            <button type="submit" class="save-btn">Сохранить изменения</button>
+        </form>
+
+        <button class="logout-btn" id="logoutBtn">Выйти из аккаунта</button>
+
+    </div>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-left">
+        © 2026 PetCare. All rights reserved.
+    </div>
+
+    <div class="footer-center">
+        <img src="icons/logo.png">
+        <p>PetCare — Система учета домашних животных.</p>
+    </div>
+
+    <div class="footer-right">
+        <p>Наши контакты:</p>
+        <p>petcare@gmail.com</p>
+        <p>animalcare@gmail.com</p>
+    </div>
+</footer>
+
+<script src="js/navigation.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

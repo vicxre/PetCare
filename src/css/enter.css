@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(#f68b4d, #2f4a5a);
+    height: 100vh;
+}
+
+/* HEADER */
+.header {
+    background: #a9b8b5;
+    padding: 15px 40px;
+    display: flex;
+    align-items: center;
+}
+
+/* ЛОГО */
+.logo-container {
+    margin-right: 30px;
+}
+
+.logo-img {
+    width: 60px;
+    height: 60px;
+
+    /* 🔥 делает картинку круглой */
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+/* НАВИГАЦИЯ */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    background: #2f4a5a;
+    color: white;
+    cursor: pointer;
+
+    /* как на скрине — мягкая тень */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* активная кнопка */
+.nav-btn.active {
+    background: #1f3542;
+}
+
+/* MAIN */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+
+.login-card {
+    background: #eaeaea;
+    padding: 40px;
+    width: 420px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background: #b8c9c5;
+}
+
+/* BUTTON */
+.login-btn {
+    margin-top: 25px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 25px;
+    background: #f68b4d;
+    color: white;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+/* 🔽 НИЖНИЙ ЛОГО */
+.footer-logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* круг */
+    object-fit: cover;
+    margin-bottom: 10px;
+}
