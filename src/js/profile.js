@@ -4,6 +4,8 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const avatarInput = document.getElementById("avatarInput");
 const avatarPreview = document.getElementById("avatarPreview");
+const headerAvatar = document.getElementById("headerAvatar");
+const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 function getStoredUser() {
     try {
@@ -13,12 +15,48 @@ function getStoredUser() {
     }
 }
 
+function getStoredAvatars() {
+    try {
+        return JSON.parse(localStorage.getItem("userAvatars")) || {};
+    } catch (_error) {
+        return {};
+    }
+}
+
+function avatarKeyFor(user) {
+    if (!user) return "";
+    return String(user.login || user.email || user.user_id || "").trim().toLowerCase();
+}
+
 function setStoredUser(user) {
     localStorage.setItem("user", JSON.stringify(user));
 }
 
+function persistUserAvatar(user) {
+    const key = avatarKeyFor(user);
+    if (!key || !user || !user.avatar) return;
+
+    const avatars = getStoredAvatars();
+    avatars[key] = user.avatar;
+    localStorage.setItem("userAvatars", JSON.stringify(avatars));
+}
+
+function updateAvatarImage(imageElement, avatar) {
+    if (!imageElement) return;
+
+    if (avatar) {
+        imageElement.src = avatar;
+        imageElement.classList.remove("avatar-empty");
+        return;
+    }
+
+    imageElement.src = EMPTY_AVATAR;
+    imageElement.classList.add("avatar-empty");
+}
+
 function loadUserData() {
     const user = getStoredUser();
+    const storedAvatar = getStoredAvatars()[avatarKeyFor(user)] || user.avatar || "";
 
     if (!nameInput || !emailInput) return;
 
@@ -26,9 +64,13 @@ function loadUserData() {
     nameInput.value = user.name || user.nickname || "";
     emailInput.value = user.email || user.login || "";
 
-    if (avatarPreview && user.avatar) {
-        avatarPreview.src = user.avatar;
+    if (storedAvatar && user.avatar !== storedAvatar) {
+        user.avatar = storedAvatar;
+        setStoredUser(user);
     }
+
+    updateAvatarImage(avatarPreview, storedAvatar);
+    updateAvatarImage(headerAvatar, storedAvatar);
 }
 
 // загрузка данных
@@ -42,13 +84,12 @@ if (avatarInput) {
 
         const reader = new FileReader();
         reader.onload = function(e) {
-            if (avatarPreview) {
-                avatarPreview.src = e.target.result;
-            }
-
             const user = getStoredUser();
             user.avatar = e.target.result;
             setStoredUser(user);
+            persistUserAvatar(user);
+            updateAvatarImage(avatarPreview, user.avatar);
+            updateAvatarImage(headerAvatar, user.avatar);
         };
 
         reader.readAsDataURL(file);
@@ -98,6 +139,9 @@ if (form) {
             }
 
             setStoredUser(user);
+            persistUserAvatar(user);
+            updateAvatarImage(avatarPreview, user.avatar);
+            updateAvatarImage(headerAvatar, user.avatar);
 
             alert("Данные сохранены");
         }

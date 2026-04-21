@@ -19,39 +19,9 @@ body {
     min-height: 100vh;
     font-family: Arial, sans-serif;
     color: var(--text);
-    background: linear-gradient(180deg, var(--bg-top) 0%, #f58d4d 53%, var(--bg-bottom) 100%);
-}
-
-.header {
-    height: 94px;
-    background: #afc1be;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 26px;
-    gap: 20px;
-}
-
-.logo {
-    width: 78px;
-    height: 78px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.nav {
-    display: flex;
-    gap: 22px;
 }
 
 .nav-btn {
-    border: none;
-    border-radius: 28px;
-    min-width: 152px;
-    padding: 13px 24px;
-    background: #e9edeb;
-    color: #374b5d;
-    cursor: pointer;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -64,16 +34,11 @@ body {
 .header-right {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
 .search-input {
-    width: 200px;
-    border: none;
-    border-radius: 28px;
-    padding: 12px 18px;
-    outline: none;
-    background: #e9edeb;
+    width: 195px;
 }
 
 .avatar-btn {
@@ -92,6 +57,14 @@ body {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #1e98b3;
+    background-color: #f7f9f8;
+}
+
+.avatar-btn img.avatar-empty {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='43' r='22' fill='%2387b8bf'/%3E%3Cpath d='M24 102c5-20 22-32 36-32s31 12 36 32' fill='%2387b8bf'/%3E%3C/svg%3E") center/70% no-repeat,
+        linear-gradient(135deg, rgba(46, 152, 168, 0.14), rgba(46, 152, 168, 0.05));
+    border-color: rgba(30, 152, 179, 0.35);
 }
 
 .main {
@@ -129,7 +102,7 @@ body {
     text-align: center;
     width: 100%;
     max-width: 435px;
-    font-size: 30px;
+    font-size: 24px;
     padding: 8px 14px;
     font-weight: 500;
 }
@@ -190,7 +163,7 @@ body {
     border-radius: 18px;
     color: #fff;
     padding: 7px 12px;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .vacc-table {
@@ -206,7 +179,7 @@ body {
     background: #eaeaea;
     border-radius: 16px;
     padding: 9px 12px;
-    font-size: 31px;
+    font-size: 20px;
     margin-bottom: 7px;
 }
 
@@ -229,20 +202,11 @@ body {
     background: var(--teal);
     color: #fff;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .footer {
     margin-top: 10px;
-    min-height: 95px;
-    background: #2f4658;
-    color: #f2f2f2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    gap: 12px;
-    font-size: 15px;
 }
 
 .footer-center {
@@ -371,12 +335,6 @@ body {
 }
 
 @media (max-width: 900px) {
-    .header {
-        height: auto;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
     .nav {
         flex-wrap: wrap;
         justify-content: center;
@@ -401,7 +359,7 @@ body {
     .upload-btn,
     .submit-btn,
     .more-btn {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .footer {

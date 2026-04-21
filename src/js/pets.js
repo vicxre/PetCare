@@ -2,12 +2,22 @@ const API_BASE = "http://localhost:3000/api";
 const petsContainer = document.getElementById("petsContainer");
 const petsSearchInput = document.getElementById("petsSearchInput");
 const petsSortSelect = document.getElementById("petsSortSelect");
+const addPetBtn = document.getElementById("addPetBtn");
 const editPetModal = document.getElementById("editPetModal");
 const closeEditModalBtn = document.getElementById("closeEditModalBtn");
 const editPetForm = document.getElementById("editPetForm");
+const addPetModal = document.getElementById("addPetModal");
+const closeAddModalBtn = document.getElementById("closeAddModalBtn");
+const addPetForm = document.getElementById("addPetForm");
+const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
+const petPhotoInput = document.getElementById("petPhoto");
+const photoName = document.getElementById("photoName");
+const petsHeaderAvatar = document.getElementById("petsHeaderAvatar");
+const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let allPets = [];
 let filteredPets = [];
+let selectedPhoto = null;
 
 function getOwnerId() {
     try {
@@ -16,6 +26,24 @@ function getOwnerId() {
     } catch (_error) {
         return null;
     }
+}
+
+function updateHeaderAvatar() {
+    if (!petsHeaderAvatar) return;
+
+    try {
+        const user = JSON.parse(localStorage.getItem("user")) || {};
+        if (user.avatar) {
+            petsHeaderAvatar.src = user.avatar;
+            petsHeaderAvatar.classList.remove("avatar-empty");
+            return;
+        }
+    } catch (_error) {
+        // ignore parse errors and show placeholder
+    }
+
+    petsHeaderAvatar.src = EMPTY_AVATAR;
+    petsHeaderAvatar.classList.add("avatar-empty");
 }
 
 function formatDate(dateValue) {
@@ -68,12 +96,31 @@ function openEditModal(pet) {
     editPetModal.classList.remove("hidden");
 }
 
+function openAddModal() {
+    if (addPetModal) {
+        addPetModal.classList.remove("hidden");
+    }
+}
+
 function closeEditModal() {
     if (editPetModal) {
         editPetModal.classList.add("hidden");
     }
     if (editPetForm) {
         editPetForm.reset();
+    }
+}
+
+function closeAddModal() {
+    if (addPetModal) {
+        addPetModal.classList.add("hidden");
+    }
+    if (addPetForm) {
+        addPetForm.reset();
+    }
+    selectedPhoto = null;
+    if (photoName) {
+        photoName.textContent = "Файл не выбран";
     }
 }
 
@@ -153,6 +200,60 @@ async function deletePet(petId) {
     }
 }
 
+function getPetPhotos() {
+    try {
+        return JSON.parse(localStorage.getItem("petPhotos")) || {};
+    } catch (_error) {
+        return {};
+    }
+}
+
+function savePetPhotos(photos) {
+    localStorage.setItem("petPhotos", JSON.stringify(photos));
+}
+
+async function addPet(event) {
+    event.preventDefault();
+
+    const ownerId = getOwnerId();
+    if (!ownerId) {
+        alert("Сначала войдите в аккаунт");
+        return;
+    }
+
+    const payload = {
+        owner_id: ownerId,
+        name: document.getElementById("petName").value.trim(),
+        birth_date: document.getElementById("petBirthDate").value || null,
+        breed_name: document.getElementById("petBreed").value.trim(),
+        weight: document.getElementById("petWeight").value,
+        color: document.getElementById("petColor").value.trim(),
+        notes: document.getElementById("petNotes").value.trim()
+    };
+
+    try {
+        const response = await fetch(`${API_BASE}/pets`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Ошибка добавления");
+
+        if (selectedPhoto && data.pet && data.pet.pets_id) {
+            const photos = getPetPhotos();
+            photos[String(data.pet.pets_id)] = selectedPhoto;
+            savePetPhotos(photos);
+        }
+
+        closeAddModal();
+        await loadPets();
+        alert("Питомец добавлен");
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 async function savePetChanges(event) {
     event.preventDefault();
 
@@ -217,8 +318,16 @@ if (petsSortSelect) {
     petsSortSelect.addEventListener("change", applyFilter);
 }
 
+if (addPetBtn) {
+    addPetBtn.addEventListener("click", openAddModal);
+}
+
 if (closeEditModalBtn) {
     closeEditModalBtn.addEventListener("click", closeEditModal);
+}
+
+if (closeAddModalBtn) {
+    closeAddModalBtn.addEventListener("click", closeAddModal);
 }
 
 if (editPetModal) {
@@ -229,8 +338,44 @@ if (editPetModal) {
     });
 }
 
+if (addPetModal) {
+    addPetModal.addEventListener("click", (event) => {
+        if (event.target === addPetModal) {
+            closeAddModal();
+        }
+    });
+}
+
 if (editPetForm) {
     editPetForm.addEventListener("submit", savePetChanges);
 }
 
-window.addEventListener("DOMContentLoaded", loadPets);
+if (uploadPhotoBtn && petPhotoInput) {
+    uploadPhotoBtn.addEventListener("click", () => {
+        petPhotoInput.click();
+    });
+
+    petPhotoInput.addEventListener("change", () => {
+        const file = petPhotoInput.files && petPhotoInput.files[0];
+        if (!file) return;
+
+        if (photoName) {
+            photoName.textContent = file.name;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            selectedPhoto = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+if (addPetForm) {
+    addPetForm.addEventListener("submit", addPet);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    updateHeaderAvatar();
+    loadPets();
+});

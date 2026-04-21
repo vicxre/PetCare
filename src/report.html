@@ -16,7 +16,12 @@
             <button class="nav-btn" data-page="vacs">Вакцинации</button>
             <button class="nav-btn" data-page="report">Отчеты</button>
         </nav>
-        <button class="profile-btn" data-page="profile">Профиль</button>
+        <div class="header-right">
+            <input class="search-input" type="text" placeholder="Поиск">
+            <button class="avatar-btn" data-page="profile" title="Профиль">
+                <img id="reportHeaderAvatar" src="" alt="Профиль">
+            </button>
+        </div>
     </header>
 
     <main class="page">
@@ -24,16 +29,19 @@
             <h1>Отчеты</h1>
             <p>Сводка по питомцам и вакцинациям.</p>
             <div id="reportContainer" class="report-grid"></div>
+            <button id="downloadReportBtn" class="download-btn" type="button">Скачать отчет</button>
         </section>
     </main>
 
     <footer class="footer">
-        <div>© 2026 PetCare. All rights reserved.</div>
-        <div class="footer-mid">
-            <img src="icons/logo.png" alt="PetCare">
-            <p>PetCare - Система учета домашних животных.</p>
+        <div class="footer-left">
+            <p>© 2026 PetCare. All rights reserved.</p>
         </div>
-        <div>
+        <div class="footer-center">
+            <img src="icons/logo.png" alt="PetCare">
+            <p><span class="brand-pet">Pet</span><span class="brand-care">Care</span> - Система учета домашних животных.</p>
+        </div>
+        <div class="footer-right">
             <p>Наши контакты:</p>
             <p>petcare@gmail.com</p>
             <p>animalcare@gmail.com</p>

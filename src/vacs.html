@@ -21,7 +21,7 @@
         <div class="header-right">
             <input class="search-input" id="vaccSearch" type="text" placeholder="Поиск">
             <button id="profileBtn" class="avatar-btn" title="Профиль">
-                <img src="img/nekit rip.jpg" alt="Профиль">
+                <img id="vacsHeaderAvatar" src="" alt="Профиль">
             </button>
         </div>
     </header>
@@ -56,12 +56,14 @@
     </main>
 
     <footer class="footer">
-        <div>© 2026 PetCare. All rights reserved.</div>
-        <div class="footer-mid">
-            <img src="icons/logo.png" alt="PetCare">
-            <p>PetCare - Система учета домашних животных.</p>
+        <div class="footer-left">
+            <p>© 2026 PetCare. All rights reserved.</p>
         </div>
-        <div class="footer-right-text">
+        <div class="footer-center">
+            <img src="icons/logo.png" alt="PetCare">
+            <p><span class="brand-pet">Pet</span><span class="brand-care">Care</span> - Система учета домашних животных.</p>
+        </div>
+        <div class="footer-right">
             <p>Наши контакты:</p>
             <p>petcare@gmail.com</p>
             <p>animalcare@gmail.com</p>
@@ -87,6 +89,14 @@
                 </label>
                 <button class="submit-btn" type="submit">Добавить</button>
             </form>
+        </div>
+    </div>
+
+    <div id="dayVaccModal" class="modal hidden">
+        <div class="modal-card day-modal-card">
+            <button id="closeDayModalBtn" class="close-btn" title="Закрыть">x</button>
+            <h3 id="dayVaccTitle">Вакцинации на дату</h3>
+            <div id="dayVaccList" class="day-vacc-list"></div>
         </div>
     </div>
 

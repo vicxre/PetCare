@@ -15,6 +15,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    font-size: 15px;
     min-height: 100vh;
     background: linear-gradient(180deg, var(--pc-bg-top) 0%, var(--pc-bg-bottom) 100%);
     display: flex;
@@ -61,13 +62,23 @@ main {
     align-items: center;
     justify-content: center;
     min-width: 130px;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .nav-btn.active,
 .profile-btn.active {
     background: var(--pc-nav-active);
     color: #fff;
+}
+
+.search-input {
+    border: none;
+    border-radius: 28px;
+    padding: 12px 18px;
+    background: var(--pc-nav-bg);
+    outline: none;
+    width: 195px;
+    font-size: 14px;
 }
 
 button,
@@ -152,14 +163,38 @@ input[type="submit"]:focus-visible,
 }
 
 .footer {
-    min-height: 94px;
+    min-height: 92px;
     background: var(--pc-footer);
     color: #f2f2f2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    padding: 14px 22px;
+    gap: 16px;
+    padding: 10px 24px;
+    font-size: 14px;
+}
+
+.footer-center,
+.footer-mid {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    max-width: 530px;
+}
+
+.footer-center img,
+.footer-mid img {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+}
+
+.brand-pet {
+    color: #f58d4d;
+}
+
+.brand-care {
+    color: #000;
 }
 
 @media (max-width: 900px) {

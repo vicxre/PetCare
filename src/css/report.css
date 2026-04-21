@@ -2,6 +2,39 @@ body {
     color: #2d4254;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-btn {
+    border: none;
+    background: transparent;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    min-width: 54px;
+}
+
+.avatar-btn img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2e98a8;
+    background-color: #f7f9f8;
+}
+
+.avatar-btn img.avatar-empty {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='43' r='22' fill='%2387b8bf'/%3E%3Cpath d='M24 102c5-20 22-32 36-32s31 12 36 32' fill='%2387b8bf'/%3E%3C/svg%3E") center/70% no-repeat,
+        linear-gradient(135deg, rgba(46, 152, 168, 0.14), rgba(46, 152, 168, 0.05));
+    border-color: rgba(46, 152, 168, 0.35);
+}
+
 .page {
     max-width: 1160px;
     margin: 24px auto;
@@ -33,6 +66,20 @@ body {
     scroll-snap-type: x proximity;
 }
 
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+    border: none;
+    border-radius: 18px;
+    background: #2e98a8;
+    color: #fff;
+    padding: 12px 22px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 .report-item {
     flex: 0 0 280px;
     min-height: 150px;
@@ -56,14 +103,6 @@ body {
     color: #2d4254;
 }
 
-.footer-mid {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.footer-mid img {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
+.footer {
+    margin-top: 10px;
 }

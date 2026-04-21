@@ -15,6 +15,8 @@ const petForm = document.getElementById("petForm");
 const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
 const petPhotoInput = document.getElementById("petPhoto");
 const photoName = document.getElementById("photoName");
+const mainHeaderAvatar = document.getElementById("mainHeaderAvatar");
+const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let allPets = [];
 let selectedPhoto = null;
@@ -30,6 +32,20 @@ function getUser() {
 function getOwnerId() {
     const user = getUser();
     return user && user.user_id ? Number(user.user_id) : null;
+}
+
+function updateHeaderAvatar() {
+    if (!mainHeaderAvatar) return;
+
+    const user = getUser();
+    if (user && user.avatar) {
+        mainHeaderAvatar.src = user.avatar;
+        mainHeaderAvatar.classList.remove("avatar-empty");
+        return;
+    }
+
+    mainHeaderAvatar.src = EMPTY_AVATAR;
+    mainHeaderAvatar.classList.add("avatar-empty");
 }
 
 function getPetPhotos() {
@@ -321,6 +337,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "enter.html";
         return;
     }
+    updateHeaderAvatar();
     await loadPets();
     await loadVaccinations();
 });

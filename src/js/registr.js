@@ -1,6 +1,19 @@
 const form = document.getElementById("registerForm");
 const API_BASE = "http://localhost:3000/api";
 
+function getStoredAvatars() {
+    try {
+        return JSON.parse(localStorage.getItem("userAvatars")) || {};
+    } catch (_error) {
+        return {};
+    }
+}
+
+function avatarKeyFor(user) {
+    if (!user) return "";
+    return String(user.login || user.email || user.user_id || "").trim().toLowerCase();
+}
+
 form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -71,8 +84,15 @@ form.addEventListener("submit", async function(e) {
                 return;
             }
 
+            const avatars = getStoredAvatars();
+            const mergedUser = {
+                ...data.user,
+                avatar: avatars[avatarKeyFor(data.user)] || data.user.avatar || ""
+            };
+
+            localStorage.setItem("user", JSON.stringify(mergedUser));
             alert("Регистрация успешна");
-            window.location.href = "enter.html";
+            window.location.href = "main.html";
         } catch (error) {
             alert("Не удалось подключиться к серверу");
         }

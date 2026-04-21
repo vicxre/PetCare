@@ -1,6 +1,19 @@
 const form = document.getElementById("loginForm");
 const API_BASE = "http://localhost:3000/api";
 
+function getStoredAvatars() {
+    try {
+        return JSON.parse(localStorage.getItem("userAvatars")) || {};
+    } catch (_error) {
+        return {};
+    }
+}
+
+function avatarKeyFor(user) {
+    if (!user) return "";
+    return String(user.login || user.email || user.user_id || "").trim().toLowerCase();
+}
+
 if (form) {
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
@@ -37,9 +50,15 @@ if (form) {
                 return;
             }
 
-            localStorage.setItem("user", JSON.stringify(data.user));
-            alert(`Успешный вход, ${data.user.nickname}`);
-            window.location.href = "profile.html";
+            const avatars = getStoredAvatars();
+            const mergedUser = {
+                ...data.user,
+                avatar: avatars[avatarKeyFor(data.user)] || data.user.avatar || ""
+            };
+
+            localStorage.setItem("user", JSON.stringify(mergedUser));
+            alert(`Успешный вход, ${mergedUser.nickname}`);
+            window.location.href = "main.html";
         } catch (error) {
             alert("Не удалось подключиться к серверу");
         }

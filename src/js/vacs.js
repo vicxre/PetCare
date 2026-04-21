@@ -17,6 +17,7 @@ const MONTH_NAMES = [
 const vaccListEl = document.getElementById("vaccList");
 const searchEl = document.getElementById("vaccSearch");
 const profileBtn = document.getElementById("profileBtn");
+const vacsHeaderAvatar = document.getElementById("vacsHeaderAvatar");
 const monthNameEl = document.getElementById("monthName");
 const calendarGridEl = document.getElementById("calendarGrid");
 const prevMonthBtn = document.getElementById("prevMonthBtn");
@@ -27,6 +28,11 @@ const openAddModalBtn = document.getElementById("openAddModalBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const addVaccForm = document.getElementById("addVaccForm");
 const petSelect = document.getElementById("petSelect");
+const dayVaccModal = document.getElementById("dayVaccModal");
+const closeDayModalBtn = document.getElementById("closeDayModalBtn");
+const dayVaccTitle = document.getElementById("dayVaccTitle");
+const dayVaccList = document.getElementById("dayVaccList");
+const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let pets = [];
 let vaccinations = [];
@@ -40,6 +46,24 @@ function getOwnerId() {
     } catch (_error) {
         return null;
     }
+}
+
+function updateHeaderAvatar() {
+    if (!vacsHeaderAvatar) return;
+
+    try {
+        const user = JSON.parse(localStorage.getItem("user")) || {};
+        if (user.avatar) {
+            vacsHeaderAvatar.src = user.avatar;
+            vacsHeaderAvatar.classList.remove("avatar-empty");
+            return;
+        }
+    } catch (_error) {
+        // ignore parse errors and show placeholder
+    }
+
+    vacsHeaderAvatar.src = EMPTY_AVATAR;
+    vacsHeaderAvatar.classList.add("avatar-empty");
 }
 
 function normalizePetColor(colorText) {
@@ -167,14 +191,53 @@ function renderCalendar() {
         const bg = buildDayStyle(colors);
 
         cells.push(`
-            <div class="day-cell ${isVacc ? "vacc" : ""} ${isToday ? "today" : ""}" style="${isVacc ? `background:${bg};` : ""}">
+            <button
+                class="day-cell ${isVacc ? "vacc" : ""} ${isToday ? "today" : ""}"
+                type="button"
+                ${isVacc ? `data-day-key="${dayKey}"` : "disabled"}
+                style="${isVacc ? `background:${bg};` : ""}"
+                aria-label="${isVacc ? `Показать вакцинации за ${formatDate(date)}` : `Дата ${day}`}"
+            >
                 ${day}
                 ${isVacc ? '<span class="day-dot"></span>' : ""}
-            </div>
+            </button>
         `);
     }
 
     calendarGridEl.innerHTML = cells.join("");
+}
+
+function openDayVaccModal(dayKey) {
+    if (!dayVaccModal || !dayVaccList || !dayVaccTitle) return;
+
+    const dayItems = vaccinations.filter((item) => getDayKey(item.v_date) === dayKey);
+    const formattedDate = formatDate(dayKey);
+    dayVaccTitle.textContent = `Вакцинации на ${formattedDate}`;
+
+    if (!dayItems.length) {
+        dayVaccList.innerHTML = '<p class="empty-message">На эту дату вакцинаций нет.</p>';
+    } else {
+        dayVaccList.innerHTML = dayItems
+            .map(
+                (item) => `
+                    <article class="day-vacc-item">
+                        <h4>${item.pet_name}</h4>
+                        <p>Вакцинация: ${item.v_type}</p>
+                        <p>Стоимость: ${item.price == null ? "-" : `${item.price} р`}</p>
+                        <p>Дата: ${formatDate(item.v_date)}</p>
+                    </article>
+                `
+            )
+            .join("");
+    }
+
+    dayVaccModal.classList.remove("hidden");
+}
+
+function closeDayVaccModal() {
+    if (dayVaccModal) {
+        dayVaccModal.classList.add("hidden");
+    }
 }
 
 function filterVaccinations() {
@@ -304,6 +367,27 @@ if (addModal) {
     });
 }
 
+if (calendarGridEl) {
+    calendarGridEl.addEventListener("click", (event) => {
+        const dayButton = event.target.closest("button[data-day-key]");
+        if (!dayButton) return;
+
+        openDayVaccModal(dayButton.dataset.dayKey);
+    });
+}
+
+if (closeDayModalBtn) {
+    closeDayModalBtn.addEventListener("click", closeDayVaccModal);
+}
+
+if (dayVaccModal) {
+    dayVaccModal.addEventListener("click", (event) => {
+        if (event.target === dayVaccModal) {
+            closeDayVaccModal();
+        }
+    });
+}
+
 if (addVaccForm) {
     addVaccForm.addEventListener("submit", addVaccination);
 }
@@ -315,6 +399,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "enter.html";
         return;
     }
+
+    updateHeaderAvatar();
 
     try {
         await loadPets(ownerId);

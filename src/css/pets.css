@@ -9,8 +9,40 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(180deg, #f58d4d 0%, #304759 100%);
     color: var(--pets-dark);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-btn {
+    border: none;
+    background: transparent;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    min-width: 54px;
+}
+
+.avatar-btn img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--pets-teal);
+    background-color: #f7f9f8;
+}
+
+.avatar-btn img.avatar-empty {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='43' r='22' fill='%2387b8bf'/%3E%3Cpath d='M24 102c5-20 22-32 36-32s31 12 36 32' fill='%2387b8bf'/%3E%3C/svg%3E") center/70% no-repeat,
+        linear-gradient(135deg, rgba(46, 152, 168, 0.14), rgba(46, 152, 168, 0.05));
+    border-color: rgba(46, 152, 168, 0.35);
 }
 
 .page-wrap {
@@ -55,6 +87,18 @@ body {
     display: grid;
     gap: 8px;
     min-width: 320px;
+}
+
+.plus-btn {
+    justify-self: end;
+    border: none;
+    background: transparent;
+    color: #4f6172;
+    font-size: 64px;
+    line-height: 1;
+    cursor: pointer;
+    width: 56px;
+    padding: 0;
 }
 
 .pets-sort {
@@ -137,16 +181,8 @@ body {
     padding: 10px 4px;
 }
 
-.footer-mid {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.footer-mid img {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
+.footer {
+    margin-top: 10px;
 }
 
 .modal {
@@ -191,6 +227,59 @@ body {
     margin-bottom: 12px;
 }
 
+#addPetModal .modal-content {
+    position: relative;
+    background: var(--pets-surface);
+    width: min(740px, 95vw);
+    border-radius: 24px;
+    padding: 24px 18px 22px;
+}
+
+#addPetModal .close-modal {
+    position: absolute;
+    right: 18px;
+    top: 14px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    color: #5e6d79;
+    cursor: pointer;
+}
+
+#addPetModal .modal-content h3 {
+    background: #b2c7c2;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 30px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+}
+
+#addPetModal .modal-fields {
+    border-radius: 20px;
+    background: #c3d3cf;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+#addPetModal .modal-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 17px;
+}
+
+#addPetModal .modal-fields input {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: var(--pets-accent);
+    color: #fff;
+    font-size: 22px;
+    outline: none;
+}
+
 #editPetForm {
     display: grid;
     gap: 10px;
@@ -223,6 +312,40 @@ body {
     font-size: 17px;
 }
 
+.upload-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.upload-btn {
+    border: none;
+    border-radius: 18px;
+    background: var(--pets-teal);
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.photo-name {
+    font-size: 14px;
+    color: #556879;
+}
+
+.submit-btn {
+    margin-top: 18px;
+    width: 100%;
+    background: #2f4658;
+    color: #fff;
+    padding: 13px;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
 @media (max-width: 900px) {
     .pets-head {
         flex-direction: column;
@@ -232,5 +355,14 @@ body {
     .pets-search {
         width: 100%;
         min-width: 0;
+    }
+
+    .plus-btn {
+        justify-self: start;
+    }
+
+    .upload-btn,
+    .submit-btn {
+        font-size: 18px;
     }
 }
