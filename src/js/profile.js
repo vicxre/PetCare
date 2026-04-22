@@ -6,6 +6,7 @@ const avatarInput = document.getElementById("avatarInput");
 const avatarPreview = document.getElementById("avatarPreview");
 const headerAvatar = document.getElementById("headerAvatar");
 const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+const API_BASE = "http://localhost:3000/api";
 
 function getStoredUser() {
     try {
@@ -98,7 +99,7 @@ if (avatarInput) {
 
 // отправка формы
 if (form) {
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit", async function(e) {
         e.preventDefault();
 
         let valid = true;
@@ -126,24 +127,57 @@ if (form) {
             valid = false;
         } else if (passwordError) passwordError.textContent = "";
 
-        if (valid) {
-            const user = getStoredUser();
+        if (!valid) return;
 
-            user.name = nameInput.value.trim();
-            user.nickname = nameInput.value.trim();
-            user.email = emailInput.value.trim();
-            user.login = emailInput.value.trim();
+        const user = getStoredUser();
+        if (!user.user_id) {
+            alert("Не удалось определить пользователя. Войдите заново.");
+            return;
+        }
 
-            if (passwordInput && passwordInput.value) {
-                user.password = passwordInput.value;
+        try {
+            const response = await fetch(`${API_BASE}/users/${user.user_id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    login: emailInput.value.trim(),
+                    nickname: nameInput.value.trim(),
+                    password: passwordInput && passwordInput.value ? passwordInput.value : undefined
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 409) {
+                    if (emailError) emailError.textContent = "Почта уже зарегистрирована";
+                    return;
+                }
+                alert(data.message || "Не удалось сохранить профиль");
+                return;
             }
 
-            setStoredUser(user);
-            persistUserAvatar(user);
-            updateAvatarImage(avatarPreview, user.avatar);
-            updateAvatarImage(headerAvatar, user.avatar);
+            const updatedUser = {
+                ...user,
+                ...data.user,
+                name: data.user.nickname,
+                email: data.user.login,
+                login: data.user.login,
+                nickname: data.user.nickname
+            };
 
+            setStoredUser(updatedUser);
+            persistUserAvatar(updatedUser);
+            updateAvatarImage(avatarPreview, updatedUser.avatar);
+            updateAvatarImage(headerAvatar, updatedUser.avatar);
+
+            if (passwordInput) passwordInput.value = "";
+            if (emailError) emailError.textContent = "";
             alert("Данные сохранены");
+        } catch (_error) {
+            alert("Не удалось подключиться к серверу");
         }
     });
 }

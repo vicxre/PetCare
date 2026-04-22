@@ -30,3 +30,36 @@ if (current) {
         el.classList.add("active");
     });
 }
+
+const THEME_MODE_KEY = "themeMode";
+
+function applyThemeToggleIcon(button, isDarkTheme) {
+    // В темной теме показываем солнце (переключение обратно в светлую)
+    button.textContent = isDarkTheme ? "☀" : "☾";
+    button.setAttribute("aria-label", isDarkTheme ? "Светлая тема" : "Темная тема");
+    button.title = isDarkTheme ? "Светлая тема" : "Темная тема";
+}
+
+document.querySelectorAll(".header-right .search-input").forEach((searchInput) => {
+    const container = searchInput.parentElement;
+    if (!container || container.querySelector(".theme-toggle-btn")) {
+        return;
+    }
+
+    const toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.className = "theme-toggle-btn";
+
+    const isDarkTheme = localStorage.getItem(THEME_MODE_KEY) === "dark";
+    document.body.classList.toggle("dark-theme", isDarkTheme);
+    applyThemeToggleIcon(toggleButton, isDarkTheme);
+
+    toggleButton.addEventListener("click", () => {
+        const nowDark = !document.body.classList.contains("dark-theme");
+        document.body.classList.toggle("dark-theme", nowDark);
+        localStorage.setItem(THEME_MODE_KEY, nowDark ? "dark" : "light");
+        applyThemeToggleIcon(toggleButton, nowDark);
+    });
+
+    searchInput.insertAdjacentElement("afterend", toggleButton);
+});

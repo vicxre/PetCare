@@ -130,6 +130,16 @@ body {
     color: #fff;
 }
 
+.vacc-delete-btn {
+    border: none;
+    border-radius: 14px;
+    padding: 8px 12px;
+    background: #d65c5c;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
 .add-btn {
     border: 1px solid #5f7080;
     border-radius: 12px;

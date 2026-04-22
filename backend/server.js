@@ -21,7 +21,7 @@ app.post("/api/auth/register", async (req, res) => {
   const { login, password, nickname } = req.body || {};
 
   if (!login || !password || !nickname) {
-    return res.status(400).json({ message: "Заполните login, password, nickname" });
+    return res.status(400).json({ message: "Заполните e-mail, пароль и имя" });
   }
 
   if (String(password).length < 6) {
@@ -47,7 +47,14 @@ app.post("/api/auth/register", async (req, res) => {
     });
   } catch (error) {
     if (error && error.code === "ER_DUP_ENTRY") {
-      return res.status(409).json({ message: "Такой login или nickname уже существует" });
+      const duplicateKey = String(error.message || "");
+      if (duplicateKey.includes("login_UNIQUE")) {
+        return res.status(409).json({ message: "Такая почта уже зарегистрирована", field: "login" });
+      }
+      if (duplicateKey.includes("nickname_UNIQUE")) {
+        return res.status(409).json({ message: "Такой ник уже существует", field: "nickname" });
+      }
+      return res.status(409).json({ message: "Такой e-mail уже зарегистрирован" });
     }
     return res.status(500).json({ message: "Ошибка сервера", error: error.message });
   }
@@ -57,7 +64,7 @@ app.post("/api/auth/login", async (req, res) => {
   const { login, password } = req.body || {};
 
   if (!login || !password) {
-    return res.status(400).json({ message: "Введите login и password" });
+    return res.status(400).json({ message: "Введите e-mail и пароль" });
   }
 
   try {
@@ -87,6 +94,63 @@ app.post("/api/auth/login", async (req, res) => {
       }
     });
   } catch (error) {
+    return res.status(500).json({ message: "Ошибка сервера", error: error.message });
+  }
+});
+
+app.put("/api/users/:userId", async (req, res) => {
+  const userId = Number(req.params.userId);
+  const { login, nickname, password } = req.body || {};
+  const normalizedLogin = String(login || "").trim();
+  const normalizedNickname = String(nickname || "").trim();
+
+  if (!userId || !normalizedLogin || !normalizedNickname) {
+    return res.status(400).json({ message: "Заполните user_id, e-mail и имя" });
+  }
+
+  if (password && String(password).length < 6) {
+    return res.status(400).json({ message: "Пароль должен быть минимум 6 символов" });
+  }
+
+  try {
+    const [userRows] = await pool.query("SELECT user_id FROM users WHERE user_id = ? LIMIT 1", [userId]);
+    if (!userRows.length) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    const [loginRows] = await pool.query("SELECT user_id FROM users WHERE login = ? AND user_id <> ? LIMIT 1", [
+      normalizedLogin,
+      userId
+    ]);
+    if (loginRows.length) {
+      return res.status(409).json({ message: "Почта уже зарегистрирована" });
+    }
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(String(password), SALT_ROUNDS);
+      await pool.query("UPDATE users SET login = ?, nickname = ?, password = ? WHERE user_id = ?", [
+        normalizedLogin,
+        normalizedNickname,
+        hashedPassword,
+        userId
+      ]);
+    } else {
+      await pool.query("UPDATE users SET login = ?, nickname = ? WHERE user_id = ?", [
+        normalizedLogin,
+        normalizedNickname,
+        userId
+      ]);
+    }
+
+    const [updatedRows] = await pool.query("SELECT user_id, login, nickname, role FROM users WHERE user_id = ? LIMIT 1", [userId]);
+    return res.json({
+      message: "Профиль обновлен",
+      user: updatedRows[0]
+    });
+  } catch (error) {
+    if (error && error.code === "ER_DUP_ENTRY") {
+      return res.status(409).json({ message: "Почта уже зарегистрирована" });
+    }
     return res.status(500).json({ message: "Ошибка сервера", error: error.message });
   }
 });
@@ -325,7 +389,7 @@ app.get("/api/vaccinations/upcoming", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      `SELECT p.pets_id AS pet_id, p.name AS pet_name, p.color AS pet_color, ph.v_date, v.v_type, v.price
+      `SELECT v.id AS vaccination_id, p.pets_id AS pet_id, p.name AS pet_name, p.color AS pet_color, ph.v_date, v.v_type, v.price
        FROM pet_health ph
        JOIN pets p ON p.pets_id = ph.pet_id
        JOIN vacs v ON v.id = ph.vacs_id
@@ -352,7 +416,7 @@ app.get("/api/vaccinations", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      `SELECT p.pets_id AS pet_id, p.name AS pet_name, p.color AS pet_color,
+      `SELECT v.id AS vaccination_id, p.pets_id AS pet_id, p.name AS pet_name, p.color AS pet_color,
               ph.v_date, v.v_type, v.price
        FROM pet_health ph
        JOIN pets p ON p.pets_id = ph.pet_id
@@ -365,6 +429,50 @@ app.get("/api/vaccinations", async (req, res) => {
     return res.json({ vaccinations: rows });
   } catch (error) {
     return res.status(500).json({ message: "Ошибка сервера", error: error.message });
+  }
+});
+
+app.delete("/api/vaccinations/:vaccinationId", async (req, res) => {
+  const vaccinationId = Number(req.params.vaccinationId);
+  const ownerId = Number(req.query.owner_id);
+
+  if (!vaccinationId || !ownerId) {
+    return res.status(400).json({ message: "Нужны vaccination_id и owner_id" });
+  }
+
+  let connection;
+
+  try {
+    const [vaccRows] = await pool.query(
+      `SELECT v.id
+       FROM vacs v
+       JOIN pets p ON p.pets_id = v.pet_id
+       WHERE v.id = ? AND p.owner_id = ?
+       LIMIT 1`,
+      [vaccinationId, ownerId]
+    );
+
+    if (!vaccRows.length) {
+      return res.status(404).json({ message: "Вакцинация не найдена" });
+    }
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    await connection.query("DELETE FROM pet_health WHERE vacs_id = ?", [vaccinationId]);
+    await connection.query("DELETE FROM vacs WHERE id = ?", [vaccinationId]);
+
+    await connection.commit();
+    return res.json({ message: "Вакцинация удалена" });
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    return res.status(500).json({ message: "Ошибка сервера", error: `${error.code || "UNKNOWN"}: ${error.message}` });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
   }
 });
 

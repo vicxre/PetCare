@@ -130,6 +130,7 @@ function renderVaccList(items) {
                 <div class="right-field">${item.pet_name}</div>
                 <div class="right-field">${item.v_type}</div>
                 <div class="right-field">${item.price == null ? "-" : `${item.price} р`}</div>
+                <button class="vacc-delete-btn" type="button" data-vaccination-id="${item.vaccination_id}">Удалить</button>
             </div>
         </article>
     `).join("");
@@ -327,6 +328,27 @@ async function addVaccination(event) {
     }
 }
 
+async function deleteVaccination(vaccinationId) {
+    const ownerId = getOwnerId();
+    if (!ownerId) {
+        alert("Сначала войдите в аккаунт");
+        window.location.href = "enter.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/vaccinations/${vaccinationId}?owner_id=${ownerId}`, {
+            method: "DELETE"
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Ошибка удаления вакцинации");
+
+        await loadVaccinations(ownerId);
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 if (profileBtn) {
     profileBtn.addEventListener("click", () => {
         window.location.href = "profile.html";
@@ -373,6 +395,21 @@ if (calendarGridEl) {
         if (!dayButton) return;
 
         openDayVaccModal(dayButton.dataset.dayKey);
+    });
+}
+
+if (vaccListEl) {
+    vaccListEl.addEventListener("click", async (event) => {
+        const deleteButton = event.target.closest("button[data-vaccination-id]");
+        if (!deleteButton) return;
+
+        const vaccinationId = Number(deleteButton.dataset.vaccinationId);
+        if (!vaccinationId) return;
+
+        const shouldDelete = window.confirm("Удалить эту вакцинацию?");
+        if (!shouldDelete) return;
+
+        await deleteVaccination(vaccinationId);
     });
 }
 

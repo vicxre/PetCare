@@ -64,6 +64,8 @@ form.addEventListener("submit", async function(e) {
     }
 
     if (valid) {
+        nameError.textContent = "";
+        emailError.textContent = "";
         try {
             const response = await fetch(`${API_BASE}/auth/register`, {
                 method: "POST",
@@ -80,7 +82,18 @@ form.addEventListener("submit", async function(e) {
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.message || "Ошибка регистрации");
+                if (response.status === 409) {
+                    const serverMessage = data.message || "Пользователь уже существует";
+                    if (data.field === "login") {
+                        emailError.textContent = serverMessage;
+                    } else if (data.field === "nickname") {
+                        nameError.textContent = serverMessage;
+                    } else {
+                        emailError.textContent = serverMessage;
+                    }
+                    return;
+                }
+                emailError.textContent = data.message || "Ошибка регистрации";
                 return;
             }
 
