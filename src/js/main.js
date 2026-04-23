@@ -1,5 +1,3 @@
-const API_BASE = "http://localhost:3000/api";
-
 const petsList = document.getElementById("petsList");
 const vaccList = document.getElementById("vaccList");
 const searchInput = document.getElementById("searchInput");
@@ -16,55 +14,12 @@ const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
 const petPhotoInput = document.getElementById("petPhoto");
 const photoName = document.getElementById("photoName");
 const mainHeaderAvatar = document.getElementById("mainHeaderAvatar");
-const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let allPets = [];
 let selectedPhoto = null;
 
-function getUser() {
-    try {
-        return JSON.parse(localStorage.getItem("user")) || null;
-    } catch (_error) {
-        return null;
-    }
-}
-
-function getOwnerId() {
-    const user = getUser();
-    return user && user.user_id ? Number(user.user_id) : null;
-}
-
-function updateHeaderAvatar() {
-    if (!mainHeaderAvatar) return;
-
-    const user = getUser();
-    if (user && user.avatar) {
-        mainHeaderAvatar.src = user.avatar;
-        mainHeaderAvatar.classList.remove("avatar-empty");
-        return;
-    }
-
-    mainHeaderAvatar.src = EMPTY_AVATAR;
-    mainHeaderAvatar.classList.add("avatar-empty");
-}
-
-function getPetPhotos() {
-    try {
-        return JSON.parse(localStorage.getItem("petPhotos")) || {};
-    } catch (_error) {
-        return {};
-    }
-}
-
-function savePetPhotos(photos) {
-    localStorage.setItem("petPhotos", JSON.stringify(photos));
-}
-
 function formatDate(value) {
-    if (!value) return "не указана";
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "не указана";
-    return date.toLocaleDateString("ru-RU");
+    return formatRuDate(value);
 }
 
 function getAgeText(birthDate) {
@@ -337,7 +292,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "enter.html";
         return;
     }
-    updateHeaderAvatar();
+    updateHeaderAvatar(mainHeaderAvatar);
     await loadPets();
     await loadVaccinations();
 });

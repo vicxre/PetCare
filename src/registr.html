@@ -8,7 +8,6 @@
 <body data-page="registr">
 
 <header class="header">
-    <!-- 🔽 ЛОГО СВЕРХУ -->
     <div class="logo-container">
         <img src="icons/logo.png" class="logo-img" alt="logo">
     </div>
@@ -27,19 +26,20 @@
 
         <p class="subtitle">
             Уже есть аккаунт?
-            <!-- 🔥 ВОТ ЗДЕСЬ УКАЗЫВАЕШЬ СТРАНИЦУ ВХОДА -->
             <a href="enter.html">Войти</a>
         </p>
 
         <form id="registerForm">
-
             <input type="text" id="name" placeholder="Имя:">
             <span class="error" id="nameError"></span>
 
             <input type="text" id="email" placeholder="E-mail:">
             <span class="error" id="emailError"></span>
 
-            <input type="password" id="password" placeholder="Пароль:">
+            <div class="password-field">
+                <input type="password" id="password" placeholder="Пароль:">
+                <button type="button" class="password-toggle" data-password-toggle aria-label="Показать пароль">Показать</button>
+            </div>
             <span class="error" id="passwordError"></span>
 
             <div class="checkbox-block">
@@ -54,8 +54,6 @@
 </main>
 
 <footer class="footer">
-
-    <!-- 🔽 ЛОГО СНИЗУ -->
     <div class="footer-logo">
         <img src="icons/logo.png" alt="logo">
     </div>

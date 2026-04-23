@@ -1,4 +1,6 @@
 const form = document.getElementById("registerForm");
+const passwordInput = document.getElementById("password");
+const passwordToggle = document.querySelector("[data-password-toggle]");
 const API_BASE = "http://localhost:3000/api";
 
 function getStoredAvatars() {
@@ -14,6 +16,15 @@ function avatarKeyFor(user) {
     return String(user.login || user.email || user.user_id || "").trim().toLowerCase();
 }
 
+if (passwordInput && passwordToggle) {
+    passwordToggle.addEventListener("click", function() {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        passwordToggle.textContent = isHidden ? "Скрыть" : "Показать";
+        passwordToggle.setAttribute("aria-label", isHidden ? "Скрыть пароль" : "Показать пароль");
+    });
+}
+
 form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -21,7 +32,7 @@ form.addEventListener("submit", async function(e) {
 
     const name = document.getElementById("name");
     const email = document.getElementById("email");
-    const password = document.getElementById("password");
+    const password = passwordInput;
     const agree = document.getElementById("agree");
 
     // ошибки

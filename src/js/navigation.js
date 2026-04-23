@@ -33,6 +33,12 @@ if (current) {
 
 const THEME_MODE_KEY = "themeMode";
 
+function applyStoredTheme() {
+    const isDarkTheme = localStorage.getItem(THEME_MODE_KEY) === "dark";
+    document.body.classList.toggle("dark-theme", isDarkTheme);
+    return isDarkTheme;
+}
+
 function applyThemeToggleIcon(button, isDarkTheme) {
     // В темной теме показываем солнце (переключение обратно в светлую)
     button.textContent = isDarkTheme ? "☀" : "☾";
@@ -40,8 +46,9 @@ function applyThemeToggleIcon(button, isDarkTheme) {
     button.title = isDarkTheme ? "Светлая тема" : "Темная тема";
 }
 
-document.querySelectorAll(".header-right .search-input").forEach((searchInput) => {
-    const container = searchInput.parentElement;
+const isDarkTheme = applyStoredTheme();
+
+document.querySelectorAll(".header-right, .header-actions").forEach((container) => {
     if (!container || container.querySelector(".theme-toggle-btn")) {
         return;
     }
@@ -49,9 +56,6 @@ document.querySelectorAll(".header-right .search-input").forEach((searchInput) =
     const toggleButton = document.createElement("button");
     toggleButton.type = "button";
     toggleButton.className = "theme-toggle-btn";
-
-    const isDarkTheme = localStorage.getItem(THEME_MODE_KEY) === "dark";
-    document.body.classList.toggle("dark-theme", isDarkTheme);
     applyThemeToggleIcon(toggleButton, isDarkTheme);
 
     toggleButton.addEventListener("click", () => {
@@ -61,5 +65,10 @@ document.querySelectorAll(".header-right .search-input").forEach((searchInput) =
         applyThemeToggleIcon(toggleButton, nowDark);
     });
 
-    searchInput.insertAdjacentElement("afterend", toggleButton);
+    const profileButton = container.querySelector(".avatar-btn, .profile-btn");
+    if (profileButton) {
+        container.insertBefore(toggleButton, profileButton);
+    } else {
+        container.appendChild(toggleButton);
+    }
 });

@@ -1,4 +1,6 @@
 const form = document.getElementById("loginForm");
+const passwordInput = document.getElementById("password");
+const passwordToggle = document.querySelector("[data-password-toggle]");
 const API_BASE = "http://localhost:3000/api";
 
 function getStoredAvatars() {
@@ -14,12 +16,21 @@ function avatarKeyFor(user) {
     return String(user.login || user.email || user.user_id || "").trim().toLowerCase();
 }
 
+if (passwordInput && passwordToggle) {
+    passwordToggle.addEventListener("click", function() {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        passwordToggle.textContent = isHidden ? "Скрыть" : "Показать";
+        passwordToggle.setAttribute("aria-label", isHidden ? "Скрыть пароль" : "Показать пароль");
+    });
+}
+
 if (form) {
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
 
         const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const password = passwordInput.value;
 
         if (!email.includes("@")) {
             alert("Email должен содержать @");

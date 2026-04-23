@@ -1,4 +1,3 @@
-const API_BASE = "http://localhost:3000/api";
 const petsContainer = document.getElementById("petsContainer");
 const petsSearchInput = document.getElementById("petsSearchInput");
 const petsSortSelect = document.getElementById("petsSortSelect");
@@ -13,44 +12,13 @@ const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
 const petPhotoInput = document.getElementById("petPhoto");
 const photoName = document.getElementById("photoName");
 const petsHeaderAvatar = document.getElementById("petsHeaderAvatar");
-const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let allPets = [];
 let filteredPets = [];
 let selectedPhoto = null;
 
-function getOwnerId() {
-    try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        return user && user.user_id ? Number(user.user_id) : null;
-    } catch (_error) {
-        return null;
-    }
-}
-
-function updateHeaderAvatar() {
-    if (!petsHeaderAvatar) return;
-
-    try {
-        const user = JSON.parse(localStorage.getItem("user")) || {};
-        if (user.avatar) {
-            petsHeaderAvatar.src = user.avatar;
-            petsHeaderAvatar.classList.remove("avatar-empty");
-            return;
-        }
-    } catch (_error) {
-        // ignore parse errors and show placeholder
-    }
-
-    petsHeaderAvatar.src = EMPTY_AVATAR;
-    petsHeaderAvatar.classList.add("avatar-empty");
-}
-
 function formatDate(dateValue) {
-    if (!dateValue) return "не указана";
-    const date = new Date(dateValue);
-    if (Number.isNaN(date.getTime())) return "не указана";
-    return date.toLocaleDateString("ru-RU");
+    return formatRuDate(dateValue);
 }
 
 function renderPets(pets) {
@@ -198,18 +166,6 @@ async function deletePet(petId) {
     } catch (error) {
         alert(error.message);
     }
-}
-
-function getPetPhotos() {
-    try {
-        return JSON.parse(localStorage.getItem("petPhotos")) || {};
-    } catch (_error) {
-        return {};
-    }
-}
-
-function savePetPhotos(photos) {
-    localStorage.setItem("petPhotos", JSON.stringify(photos));
 }
 
 async function addPet(event) {
@@ -376,6 +332,6 @@ if (addPetForm) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    updateHeaderAvatar();
+    updateHeaderAvatar(petsHeaderAvatar);
     loadPets();
 });

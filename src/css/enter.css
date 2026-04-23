@@ -91,6 +91,30 @@ input {
     background: #b8c9c5;
 }
 
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 125px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #2f4a5a;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 16px;
+    box-shadow: none;
+}
+
 /* BUTTON */
 .login-btn {
     margin-top: 25px;
@@ -100,6 +124,12 @@ input {
     background: #f68b4d;
     color: white;
     cursor: pointer;
+}
+
+.password-toggle:hover,
+.password-toggle:active {
+    transform: translateY(-50%);
+    box-shadow: none;
 }
 
 /* FOOTER */

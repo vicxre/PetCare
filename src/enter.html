@@ -34,7 +34,10 @@
             <input type="text" id="email" placeholder="E-mail">
             <span class="error" id="emailError"></span>
 
-            <input type="password" id="password" placeholder="Пароль">
+            <div class="password-field">
+                <input type="password" id="password" placeholder="Пароль">
+                <button type="button" class="password-toggle" data-password-toggle aria-label="Показать пароль">Показать</button>
+            </div>
             <span class="error" id="passwordError"></span>
 
             <button type="submit" class="login-btn">Войти</button>

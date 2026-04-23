@@ -1,36 +1,7 @@
-const API_BASE = "http://localhost:3000/api";
 const reportContainer = document.getElementById("reportContainer");
 const reportHeaderAvatar = document.getElementById("reportHeaderAvatar");
 const downloadReportBtn = document.getElementById("downloadReportBtn");
-const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 let currentReportData = null;
-
-function getOwnerId() {
-    try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        return user && user.user_id ? Number(user.user_id) : null;
-    } catch (_error) {
-        return null;
-    }
-}
-
-function updateHeaderAvatar() {
-    if (!reportHeaderAvatar) return;
-
-    try {
-        const user = JSON.parse(localStorage.getItem("user")) || {};
-        if (user.avatar) {
-            reportHeaderAvatar.src = user.avatar;
-            reportHeaderAvatar.classList.remove("avatar-empty");
-            return;
-        }
-    } catch (_error) {
-        // ignore parse errors and show placeholder
-    }
-
-    reportHeaderAvatar.src = EMPTY_AVATAR;
-    reportHeaderAvatar.classList.add("avatar-empty");
-}
 
 function renderReport({ petsCount, vaccinationsCount, nearestVaccinationDate }) {
     if (!reportContainer) return;
@@ -181,7 +152,7 @@ async function loadReport() {
         const pets = petsData.pets || [];
         const vaccs = vaccData.vaccinations || [];
         const nearestVaccinationDate = vaccs.length
-            ? new Date(vaccs[0].v_date).toLocaleDateString("ru-RU")
+            ? formatRuDate(vaccs[0].v_date)
             : null;
 
         currentReportData = {
@@ -203,6 +174,6 @@ if (downloadReportBtn) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    updateHeaderAvatar();
+    updateHeaderAvatar(reportHeaderAvatar);
     loadReport();
 });

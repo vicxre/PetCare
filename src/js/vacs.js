@@ -1,4 +1,3 @@
-const API_BASE = "http://localhost:3000/api";
 const MONTH_NAMES = [
     "Январь",
     "Февраль",
@@ -32,39 +31,11 @@ const dayVaccModal = document.getElementById("dayVaccModal");
 const closeDayModalBtn = document.getElementById("closeDayModalBtn");
 const dayVaccTitle = document.getElementById("dayVaccTitle");
 const dayVaccList = document.getElementById("dayVaccList");
-const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 let pets = [];
 let vaccinations = [];
 let filteredVaccinations = [];
 let calendarDate = new Date();
-
-function getOwnerId() {
-    try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        return user && user.user_id ? Number(user.user_id) : null;
-    } catch (_error) {
-        return null;
-    }
-}
-
-function updateHeaderAvatar() {
-    if (!vacsHeaderAvatar) return;
-
-    try {
-        const user = JSON.parse(localStorage.getItem("user")) || {};
-        if (user.avatar) {
-            vacsHeaderAvatar.src = user.avatar;
-            vacsHeaderAvatar.classList.remove("avatar-empty");
-            return;
-        }
-    } catch (_error) {
-        // ignore parse errors and show placeholder
-    }
-
-    vacsHeaderAvatar.src = EMPTY_AVATAR;
-    vacsHeaderAvatar.classList.add("avatar-empty");
-}
 
 function normalizePetColor(colorText) {
     if (!colorText) return "#2e98a8";
@@ -98,9 +69,7 @@ function normalizePetColor(colorText) {
 }
 
 function formatDate(dateValue) {
-    const d = new Date(dateValue);
-    if (Number.isNaN(d.getTime())) return "-";
-    return d.toLocaleDateString("ru-RU");
+    return formatRuDate(dateValue, "-");
 }
 
 function getDayKey(dateValue) {
@@ -437,7 +406,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    updateHeaderAvatar();
+    updateHeaderAvatar(vacsHeaderAvatar);
 
     try {
         await loadPets(ownerId);

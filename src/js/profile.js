@@ -5,23 +5,9 @@ const passwordInput = document.getElementById("password");
 const avatarInput = document.getElementById("avatarInput");
 const avatarPreview = document.getElementById("avatarPreview");
 const headerAvatar = document.getElementById("headerAvatar");
-const EMPTY_AVATAR = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-const API_BASE = "http://localhost:3000/api";
-
-function getStoredUser() {
-    try {
-        return JSON.parse(localStorage.getItem("user")) || {};
-    } catch (_error) {
-        return {};
-    }
-}
 
 function getStoredAvatars() {
-    try {
-        return JSON.parse(localStorage.getItem("userAvatars")) || {};
-    } catch (_error) {
-        return {};
-    }
+    return readStorageJson("userAvatars", {});
 }
 
 function avatarKeyFor(user) {
@@ -30,7 +16,7 @@ function avatarKeyFor(user) {
 }
 
 function setStoredUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
+    writeStorageJson("user", user);
 }
 
 function persistUserAvatar(user) {
@@ -39,24 +25,11 @@ function persistUserAvatar(user) {
 
     const avatars = getStoredAvatars();
     avatars[key] = user.avatar;
-    localStorage.setItem("userAvatars", JSON.stringify(avatars));
-}
-
-function updateAvatarImage(imageElement, avatar) {
-    if (!imageElement) return;
-
-    if (avatar) {
-        imageElement.src = avatar;
-        imageElement.classList.remove("avatar-empty");
-        return;
-    }
-
-    imageElement.src = EMPTY_AVATAR;
-    imageElement.classList.add("avatar-empty");
+    writeStorageJson("userAvatars", avatars);
 }
 
 function loadUserData() {
-    const user = getStoredUser();
+    const user = getStoredUser() || {};
     const storedAvatar = getStoredAvatars()[avatarKeyFor(user)] || user.avatar || "";
 
     if (!nameInput || !emailInput) return;
@@ -85,7 +58,7 @@ if (avatarInput) {
 
         const reader = new FileReader();
         reader.onload = function(e) {
-            const user = getStoredUser();
+            const user = getStoredUser() || {};
             user.avatar = e.target.result;
             setStoredUser(user);
             persistUserAvatar(user);
@@ -129,7 +102,7 @@ if (form) {
 
         if (!valid) return;
 
-        const user = getStoredUser();
+        const user = getStoredUser() || {};
         if (!user.user_id) {
             alert("Не удалось определить пользователя. Войдите заново.");
             return;
