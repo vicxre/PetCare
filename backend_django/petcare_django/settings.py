@@ -7,7 +7,7 @@ ENV = load_env(BASE_DIR / ".env")
 
 SECRET_KEY = ENV.get("SECRET_KEY", "django-insecure-college-project")
 DEBUG = ENV.get("DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
