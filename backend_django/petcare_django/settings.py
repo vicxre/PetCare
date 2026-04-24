@@ -10,6 +10,7 @@ DEBUG = ENV.get("DEBUG", "True").lower() == "true"
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -67,5 +68,12 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    ("css", BASE_DIR.parent / "src" / "css"),
+    ("js", BASE_DIR.parent / "src" / "js"),
+    ("img", BASE_DIR.parent / "src" / "img"),
+    ("icons", BASE_DIR.parent / "src" / "icons"),
+]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = False
